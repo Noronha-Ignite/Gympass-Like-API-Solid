@@ -1,5 +1,6 @@
 import { genSalt, hash } from 'bcryptjs'
 import { prisma } from '../libs/prisma'
+import { PrismaUsersRepositories } from '../repositories/prisma-users-repository'
 
 type RegisterServiceParams = {
   name: string
@@ -24,13 +25,13 @@ export const registerService = async ({
 
   const salt = await genSalt(6)
 
-  const passwordHash = await hash(password, salt)
+  const password_hash = await hash(password, salt)
 
-  await prisma.user.create({
-    data: {
-      name,
-      email,
-      password_hash: passwordHash,
-    },
+  const prismaUsersRepository = new PrismaUsersRepositories()
+
+  return await prismaUsersRepository.create({
+    email,
+    name,
+    password_hash,
   })
 }
