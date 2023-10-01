@@ -1,7 +1,7 @@
-import { genSalt, hash } from 'bcryptjs'
 import { z } from 'zod'
+
 import { Controller } from '../../@types/http'
-import { prisma } from '../../libs/prisma'
+import { registerService } from '../../services/register'
 
 export const register: Controller = async (req, reply) => {
   const registerBodySchema = z.object({
@@ -12,27 +12,15 @@ export const register: Controller = async (req, reply) => {
 
   const { name, email, password } = registerBodySchema.parse(req.body)
 
-  const userWithSameEmail = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  })
-
-  if (userWithSameEmail) {
-    return reply.status(409).send()
-  }
-
-  const salt = await genSalt(6)
-
-  const passwordHash = await hash(password, salt)
-
-  await prisma.user.create({
-    data: {
+  try {
+    await registerService({
       name,
       email,
-      password_hash: passwordHash,
-    },
-  })
+      password,
+    })
+  } catch (err) {
+    return reply.status(409).send()
+  }
 
   return reply.status(201).send()
 }
