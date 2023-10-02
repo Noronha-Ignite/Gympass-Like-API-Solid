@@ -1,6 +1,7 @@
 import { genSalt, hash } from 'bcryptjs'
 
 import { UsersRepository } from '../repositories/users-repository'
+import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
 type RegisterServiceParams = {
   name: string
@@ -15,7 +16,7 @@ export class RegisterService {
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
 
     if (userWithSameEmail) {
-      throw new Error('Email already exists')
+      throw new UserAlreadyExistsError()
     }
 
     const salt = await genSalt(6)
