@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
 import { Controller } from '../../@types/http'
-import { registerService } from '../../services/register'
+import { PrismaUsersRepositories } from '../../repositories/prisma/prisma-users-repository'
+import { RegisterService } from '../../services/register'
 
 export const register: Controller = async (req, reply) => {
   const registerBodySchema = z.object({
@@ -13,7 +14,9 @@ export const register: Controller = async (req, reply) => {
   const { name, email, password } = registerBodySchema.parse(req.body)
 
   try {
-    await registerService({
+    const registerService = new RegisterService(new PrismaUsersRepositories())
+
+    await registerService.execute({
       name,
       email,
       password,

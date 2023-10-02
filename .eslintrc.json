@@ -3,7 +3,8 @@
   "plugins": ["import"],
   "rules": {
     "import/order": ["error", {"alphabetize": {"order": "asc"}}],
-    "camelcase": "off"
+    "camelcase": "off",
+    "no-useless-constructor": "off"
   },
   "settings": {
     "import/resolver": {

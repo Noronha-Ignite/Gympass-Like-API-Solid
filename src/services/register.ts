@@ -1,6 +1,6 @@
 import { genSalt, hash } from 'bcryptjs'
-import { prisma } from '../libs/prisma'
-import { PrismaUsersRepositories } from '../repositories/prisma-users-repository'
+
+import { UsersRepository } from '../repositories/users-repository'
 
 type RegisterServiceParams = {
   name: string
@@ -8,30 +8,24 @@ type RegisterServiceParams = {
   password: string
 }
 
-export const registerService = async ({
-  name,
-  email,
-  password,
-}: RegisterServiceParams) => {
-  const userWithSameEmail = await prisma.user.findUnique({
-    where: {
+export class RegisterService {
+  constructor(private usersRepository: UsersRepository) {}
+
+  async execute({ name, email, password }: RegisterServiceParams) {
+    const userWithSameEmail = await this.usersRepository.findByEmail(email)
+
+    if (userWithSameEmail) {
+      throw new Error('Email already exists')
+    }
+
+    const salt = await genSalt(6)
+
+    const password_hash = await hash(password, salt)
+
+    return await this.usersRepository.create({
       email,
-    },
-  })
-
-  if (userWithSameEmail) {
-    throw new Error('Email already exists')
+      name,
+      password_hash,
+    })
   }
-
-  const salt = await genSalt(6)
-
-  const password_hash = await hash(password, salt)
-
-  const prismaUsersRepository = new PrismaUsersRepositories()
-
-  return await prismaUsersRepository.create({
-    email,
-    name,
-    password_hash,
-  })
 }
