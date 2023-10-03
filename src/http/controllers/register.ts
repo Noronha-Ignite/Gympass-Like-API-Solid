@@ -1,9 +1,8 @@
 import { z } from 'zod'
 
 import { Controller } from '../../@types/http'
-import { PrismaUsersRepositories } from '../../repositories/prisma/prisma-users-repository'
 import { UserAlreadyExistsError } from '../../services/errors/user-already-exists-error'
-import { RegisterService } from '../../services/register'
+import { makeRegisterService } from '../../services/factories/make-register-service'
 
 export const register: Controller = async (req, reply) => {
   const registerBodySchema = z.object({
@@ -15,7 +14,7 @@ export const register: Controller = async (req, reply) => {
   const { name, email, password } = registerBodySchema.parse(req.body)
 
   try {
-    const registerService = new RegisterService(new PrismaUsersRepositories())
+    const registerService = makeRegisterService()
 
     await registerService.execute({
       name,

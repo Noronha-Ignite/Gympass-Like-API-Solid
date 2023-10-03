@@ -1,9 +1,8 @@
 import { z } from 'zod'
 
 import { Controller } from '../../@types/http'
-import { PrismaUsersRepositories } from '../../repositories/prisma/prisma-users-repository'
-import { AuthenticateService } from '../../services/authenticate'
 import { InvalidCredentialsError } from '../../services/errors/invalid-credentials-error'
+import { makeAuthenticateService } from '../../services/factories/make-authenticate-service'
 
 export const authenticate: Controller = async (req, reply) => {
   const authenticateBodySchema = z.object({
@@ -14,9 +13,7 @@ export const authenticate: Controller = async (req, reply) => {
   const { email, password } = authenticateBodySchema.parse(req.body)
 
   try {
-    const authenticateService = new AuthenticateService(
-      new PrismaUsersRepositories(),
-    )
+    const authenticateService = makeAuthenticateService()
 
     await authenticateService.execute({
       email,
