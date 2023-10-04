@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { CheckIn, Prisma } from '@prisma/client'
 
 import dayjs from 'dayjs'
+import { MAX_PAGE_LENGHT } from '../../utils/constants'
 import { CheckInsRepository } from '../check-ins-repository'
 
 export class InMemoryCheckInsRepository implements CheckInsRepository {
@@ -41,8 +42,6 @@ export class InMemoryCheckInsRepository implements CheckInsRepository {
   }
 
   async findManyByUserId(userId: string, { page }: { page: number }) {
-    const MAX_PAGE_LENGHT = 20
-
     return this._checkIns
       .filter((checkIn) => checkIn.user_id === userId)
       .slice((page - 1) * MAX_PAGE_LENGHT, page * MAX_PAGE_LENGHT)

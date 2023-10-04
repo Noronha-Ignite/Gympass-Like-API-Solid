@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto'
 import { Gym, Prisma } from '@prisma/client'
+import { MAX_DISTANCE_TO_GYM, MAX_PAGE_LENGHT } from '../../utils/constants'
 import { getDistanceBetweenCoordinates } from '../../utils/get-distance-between-coordinates'
 import { GymsRepository } from '../gyms-repository'
 
@@ -26,8 +27,6 @@ export class InMemoryGymsRepository implements GymsRepository {
   }
 
   async searchMany(query: string, { page }: { page: number }) {
-    const MAX_PAGE_LENGHT = 20
-
     return this._gyms
       .filter((gym) => gym.title.toLowerCase().includes(query.toLowerCase()))
       .slice((page - 1) * MAX_PAGE_LENGHT, page * MAX_PAGE_LENGHT)
@@ -42,7 +41,7 @@ export class InMemoryGymsRepository implements GymsRepository {
 
       const distance = getDistanceBetweenCoordinates(gymCoords, coords)
 
-      return distance < 10 // All gyms in at least 10Km distance
+      return distance < MAX_DISTANCE_TO_GYM
     })
   }
 }
