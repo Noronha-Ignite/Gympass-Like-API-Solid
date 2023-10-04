@@ -1,6 +1,8 @@
 import { CheckIn } from '@prisma/client'
 
+import dayjs from 'dayjs'
 import { CheckInsRepository } from '../repositories/check-ins-repository'
+import { CheckInValidateTimeExpiredError } from './errors/check-in-validate-time-expired-error'
 import { ResourceNotFoundError } from './errors/resource-not-found'
 
 type ValidateCheckInServiceRequest = {
@@ -21,6 +23,15 @@ export class ValidateCheckInService {
 
     if (!existingCheckIn) {
       throw new ResourceNotFoundError()
+    }
+
+    const distanceInMinutesFromCheckInCreation = dayjs(new Date()).diff(
+      existingCheckIn.created_at,
+      'minutes',
+    )
+
+    if (distanceInMinutesFromCheckInCreation > 20) {
+      throw new CheckInValidateTimeExpiredError()
     }
 
     const checkInToBeSaved: CheckIn = {
