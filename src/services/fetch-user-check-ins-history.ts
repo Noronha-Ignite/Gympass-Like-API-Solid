@@ -4,7 +4,7 @@ import { CheckInsRepository } from '../repositories/check-ins-repository'
 
 type FetchUserCheckInsHistoryServiceRequest = {
   userId: string
-  page: number
+  page?: number
 }
 
 type FetchUserCheckInsHistoryServiceResponse = {
@@ -16,7 +16,7 @@ export class FetchUserCheckInsHistoryService {
 
   async execute({
     userId,
-    page,
+    page = 1,
   }: FetchUserCheckInsHistoryServiceRequest): Promise<FetchUserCheckInsHistoryServiceResponse> {
     const checkIns = await this.checkInsRepository.findManyByUserId(userId, {
       page,

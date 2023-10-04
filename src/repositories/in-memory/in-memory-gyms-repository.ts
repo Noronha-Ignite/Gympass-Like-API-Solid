@@ -23,4 +23,12 @@ export class InMemoryGymsRepository implements GymsRepository {
   async findById(id: string) {
     return this._gyms.find((gym) => gym.id === id) ?? null
   }
+
+  async searchMany(query: string, { page }: { page: number }) {
+    const MAX_PAGE_LENGHT = 20
+
+    return this._gyms
+      .filter((gym) => gym.title.toLowerCase().includes(query.toLowerCase()))
+      .slice((page - 1) * MAX_PAGE_LENGHT, page * MAX_PAGE_LENGHT)
+  }
 }

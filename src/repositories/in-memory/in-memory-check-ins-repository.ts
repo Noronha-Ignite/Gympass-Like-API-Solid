@@ -36,10 +36,7 @@ export class InMemoryCheckInsRepository implements CheckInsRepository {
     return checkIn ?? null
   }
 
-  async findManyByUserId(
-    userId: string,
-    { page }: { page: number } = { page: 1 },
-  ) {
+  async findManyByUserId(userId: string, { page }: { page: number }) {
     const MAX_PAGE_LENGHT = 20
 
     return this._checkIns
