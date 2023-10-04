@@ -3,6 +3,7 @@ export type Coords = {
   longitude: number
 }
 
+/** Returns the distance in Km */
 export const getDistanceBetweenCoordinates = (from: Coords, to: Coords) => {
   if (from.latitude === to.latitude && from.longitude === to.longitude) {
     return 0
@@ -27,5 +28,5 @@ export const getDistanceBetweenCoordinates = (from: Coords, to: Coords) => {
   dist = dist * 60 * 1.1515
   dist = dist * 1.609344
 
-  return dist // Return in KM
+  return dist
 }

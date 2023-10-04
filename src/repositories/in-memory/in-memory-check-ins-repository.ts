@@ -35,4 +35,15 @@ export class InMemoryCheckInsRepository implements CheckInsRepository {
 
     return checkIn ?? null
   }
+
+  async findManyByUserId(
+    userId: string,
+    { page }: { page: number } = { page: 1 },
+  ) {
+    const MAX_PAGE_LENGHT = 20
+
+    return this._checkIns
+      .filter((checkIn) => checkIn.user_id === userId)
+      .slice((page - 1) * MAX_PAGE_LENGHT, page * MAX_PAGE_LENGHT)
+  }
 }

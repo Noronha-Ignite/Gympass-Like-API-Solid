@@ -7,7 +7,7 @@ import { GetUserProfileService } from './get-user-profile'
 let usersRepository: InMemoryUsersRepository
 let sut: GetUserProfileService
 
-describe('Authenticate Service', () => {
+describe('Get user profile Service', () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository()
     sut = new GetUserProfileService(usersRepository)

@@ -6,7 +6,7 @@ import { CreateGymService } from './create-gym'
 let gymsRepository: InMemoryGymsRepository
 let sut: CreateGymService
 
-describe('Register Service', () => {
+describe('Create gym Service', () => {
   beforeEach(async () => {
     gymsRepository = new InMemoryGymsRepository()
     sut = new CreateGymService(gymsRepository)
