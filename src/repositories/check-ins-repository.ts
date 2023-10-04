@@ -8,4 +8,6 @@ export interface CheckInsRepository {
     userId: string,
     params?: { page?: number },
   ): Promise<CheckIn[]>
+
+  countByUserId(userId: string): Promise<number>
 }
