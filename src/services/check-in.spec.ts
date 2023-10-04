@@ -8,11 +8,18 @@ let checkInsRepository: InMemoryCheckInsRepository
 let gymsRepository: InMemoryGymsRepository
 let sut: CheckInService
 
-describe('Authenticate Service', () => {
+describe('Authenticate Service', async () => {
   beforeEach(async () => {
     checkInsRepository = new InMemoryCheckInsRepository()
     gymsRepository = new InMemoryGymsRepository()
     sut = new CheckInService(checkInsRepository, gymsRepository)
+
+    await gymsRepository.create({
+      id: 'gym-01',
+      title: 'gym 01',
+      latitude: 0,
+      longitude: 0,
+    })
 
     vi.useFakeTimers()
   })
@@ -22,13 +29,6 @@ describe('Authenticate Service', () => {
   })
 
   it('should be able to check in', async () => {
-    await gymsRepository.create({
-      id: 'gym-01',
-      title: 'gym 01',
-      latitude: 0,
-      longitude: 0,
-    })
-
     const { checkIn } = await sut.execute({
       userId: 'user-id',
       gymId: 'gym-01',
@@ -43,13 +43,6 @@ describe('Authenticate Service', () => {
 
   it('should be able to check in twice in different days', async () => {
     vi.setSystemTime(new Date(2020, 0, 10, 8, 0, 0))
-
-    await gymsRepository.create({
-      id: 'gym-01',
-      title: 'gym 01',
-      latitude: 0,
-      longitude: 0,
-    })
 
     await sut.execute({
       userId: 'user-id',
@@ -77,13 +70,6 @@ describe('Authenticate Service', () => {
   it('should not be able to check in twice in the same day', async () => {
     vi.setSystemTime(new Date(2020, 0, 10, 8, 0, 0))
 
-    await gymsRepository.create({
-      id: 'gym-01',
-      title: 'gym 01',
-      latitude: 0,
-      longitude: 0,
-    })
-
     await sut.execute({
       userId: 'user-id',
       gymId: 'gym-01',
@@ -100,6 +86,19 @@ describe('Authenticate Service', () => {
         userCoords: {
           latitude: 0,
           longitude: 0,
+        },
+      }),
+    ).rejects.toBeInstanceOf(Error)
+  })
+
+  it('should not be able to check in on distant gym', async () => {
+    await expect(
+      sut.execute({
+        userId: 'user-id',
+        gymId: 'gym-01',
+        userCoords: {
+          latitude: -8.1179919,
+          longitude: -34.9175803,
         },
       }),
     ).rejects.toBeInstanceOf(Error)
