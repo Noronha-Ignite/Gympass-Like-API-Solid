@@ -37,7 +37,7 @@ describe('Authenticate Service', () => {
       password: '123456',
     }
 
-    expect(() => sut.execute(credentials)).rejects.toBeInstanceOf(
+    await expect(() => sut.execute(credentials)).rejects.toBeInstanceOf(
       InvalidCredentialsError,
     )
   })
@@ -54,7 +54,7 @@ describe('Authenticate Service', () => {
       password_hash: await hash(credentials.password, 6),
     })
 
-    expect(() =>
+    await expect(() =>
       sut.execute({
         ...credentials,
         password: '1234567',

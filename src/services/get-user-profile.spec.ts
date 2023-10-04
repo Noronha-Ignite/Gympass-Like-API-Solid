@@ -26,7 +26,7 @@ describe('Authenticate Service', () => {
   })
 
   it('should not be able to get a user with wrong id', async () => {
-    expect(() =>
+    await expect(() =>
       sut.execute({ userId: 'fake-id-not-existent' }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })

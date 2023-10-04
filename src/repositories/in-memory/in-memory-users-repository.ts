@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import { Prisma, User } from '@prisma/client'
 
 import { UsersRepository } from '../users-repository'
@@ -7,7 +8,7 @@ export class InMemoryUsersRepository implements UsersRepository {
 
   async create(data: Prisma.UserCreateInput) {
     const user: User = {
-      id: 'user-id',
+      id: randomUUID(),
       created_at: new Date(),
       email: data.email,
       name: data.name,
