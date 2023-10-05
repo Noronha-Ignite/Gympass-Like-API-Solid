@@ -7,12 +7,12 @@ import { makeCreateGymService } from '../../../services/factories/make-create-gy
 export const create: Controller = async (req, reply) => {
   const createGymBodySchema = z.object({
     title: z.string(),
-    description: z.string().nullable(),
-    phone: z.string().nullable(),
-    latitude: z.number().refine((value) => {
+    description: z.string().optional(),
+    phone: z.string().optional(),
+    latitude: z.coerce.number().refine((value) => {
       return Math.abs(value) <= 90
     }),
-    longitude: z.number().refine((value) => {
+    longitude: z.coerce.number().refine((value) => {
       return Math.abs(value) <= 180
     }),
   })
@@ -21,7 +21,11 @@ export const create: Controller = async (req, reply) => {
 
   const createGymService = makeCreateGymService()
 
-  const { gym } = await createGymService.execute(gymData)
+  const { gym } = await createGymService.execute({
+    ...gymData,
+    description: gymData.description ?? null,
+    phone: gymData.phone ?? null,
+  })
 
   return reply.status(201).send({ id: gym.id })
 }
