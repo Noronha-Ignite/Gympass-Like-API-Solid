@@ -12,7 +12,7 @@ app.register(fastifyJwt, {
 })
 
 app.register(usersRoutes)
-app.register(gymsRoutes)
+app.register(gymsRoutes, { prefix: 'gyms' })
 
 app.setErrorHandler((error, _request, reply) => {
   if (error instanceof ZodError) {
