@@ -25,6 +25,20 @@ describe('Get user profile Service', () => {
     expect(user.name).toBe('John Doe')
   })
 
+  it('should not get user password_hash', async () => {
+    const { id } = await usersRepository.create({
+      name: 'John Doe',
+      email: 'johndoe@email.com',
+      password_hash: '123456',
+    })
+
+    const { user } = await sut.execute({ userId: id })
+
+    console.log(user)
+
+    expect(user).not.toHaveProperty('password_hash')
+  })
+
   it('should not be able to get a user with wrong id', async () => {
     await expect(() =>
       sut.execute({ userId: 'fake-id-not-existent' }),
