@@ -34,8 +34,6 @@ describe('Get user profile Service', () => {
 
     const { user } = await sut.execute({ userId: id })
 
-    console.log(user)
-
     expect(user).not.toHaveProperty('password_hash')
   })
 
