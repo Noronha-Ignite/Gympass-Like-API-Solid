@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-import { Controller } from '../../@types/http'
-import { InvalidCredentialsError } from '../../services/errors/invalid-credentials-error'
-import { makeAuthenticateService } from '../../services/factories/make-authenticate-service'
+import { Controller } from '../../../@types/http'
+import { InvalidCredentialsError } from '../../../services/errors/invalid-credentials-error'
+import { makeAuthenticateService } from '../../../services/factories/make-authenticate-service'
 
 export const authenticate: Controller = async (req, reply) => {
   const authenticateBodySchema = z.object({

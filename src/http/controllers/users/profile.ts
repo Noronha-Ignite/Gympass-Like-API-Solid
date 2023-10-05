@@ -1,5 +1,5 @@
-import { Controller } from '../../@types/http'
-import { makeGetUserProfileService } from '../../services/factories/make-get-user-profile'
+import { Controller } from '../../../@types/http'
+import { makeGetUserProfileService } from '../../../services/factories/make-get-user-profile'
 
 export const profile: Controller = async (req, reply) => {
   const getUserProfile = makeGetUserProfileService()

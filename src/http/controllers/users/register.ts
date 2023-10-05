@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-import { Controller } from '../../@types/http'
-import { UserAlreadyExistsError } from '../../services/errors/user-already-exists-error'
-import { makeRegisterService } from '../../services/factories/make-register-service'
+import { Controller } from '../../../@types/http'
+import { UserAlreadyExistsError } from '../../../services/errors/user-already-exists-error'
+import { makeRegisterService } from '../../../services/factories/make-register-service'
 
 export const register: Controller = async (req, reply) => {
   const registerBodySchema = z.object({
