@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test": "vitest run --dir src/services",
+    "pretest:e2e": "./setup-environment-test.sh",
+    "test:e2e": "vitest run --dir src/http",
+    "test:watch": "vitest --dir src/services",
     "test:coverage": "vitest --coverage",
     "test:ui": "vitest --ui",
     "build": "tsup src"
