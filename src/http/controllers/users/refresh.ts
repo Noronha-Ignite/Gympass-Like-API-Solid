@@ -3,10 +3,12 @@ import { Controller } from '../../../@types/http'
 export const refresh: Controller = async (req, reply) => {
   await req.jwtVerify({ onlyCookie: true })
 
-  const { sub } = req.user
+  const { sub, role } = req.user
 
   const token = await reply.jwtSign(
-    {},
+    {
+      role,
+    },
     {
       sign: {
         sub,
@@ -15,7 +17,9 @@ export const refresh: Controller = async (req, reply) => {
   )
 
   const refreshToken = await reply.jwtSign(
-    {},
+    {
+      role,
+    },
     {
       sign: {
         sub,

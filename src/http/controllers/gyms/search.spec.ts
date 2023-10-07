@@ -13,7 +13,7 @@ describe('Search gyms (e2e)', () => {
   })
 
   it('should be able to search gyms', async () => {
-    const { token } = await createAndAuthenticateUser(app)
+    const { token } = await createAndAuthenticateUser(app, 'ADMIN')
 
     Array.from({ length: 2 }).forEach(async (_, index) => {
       await request(app.server)

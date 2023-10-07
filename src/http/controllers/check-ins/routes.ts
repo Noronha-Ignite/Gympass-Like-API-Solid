@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { verifyJWT } from '../../middlewares/verify-jwt'
+import { verifyUserRole } from '../../middlewares/verify-user-role'
 import { create } from './create'
 import { history } from './history'
 import { metrics } from './metrics'
@@ -12,5 +13,9 @@ export const checkInsRoutes = async (app: FastifyInstance) => {
   app.get('/metrics', metrics)
 
   app.post('/gyms/:gymId', create)
-  app.patch('/:checkInId/validate', validate)
+  app.patch(
+    '/:checkInId/validate',
+    { onRequest: [verifyUserRole('ADMIN')] },
+    validate,
+  )
 }
